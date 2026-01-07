@@ -33,8 +33,8 @@ export default function Navbar() {
         {/* Navbar links */}
         <div className="collapse navbar-collapse" id="nav">
           <ul className="navbar-nav ms-auto align-items-lg-center gap-lg-4">
-            {["/", "/contact", "/courses", "/faq"].map((path, i) => {
-              const labels = ["Home", "Contact", "Courses", "FAQ"];
+            {["/", "/about", "/courses", "/certificates", "/faq"].map((path, i) => {
+              const labels = ["Home", "About", "Courses","Certificates", "FAQ"];
               return (
                 <li className="nav-item" key={path}>
                   <NavLink
