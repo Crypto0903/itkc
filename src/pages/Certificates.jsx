@@ -1,99 +1,99 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { FaCertificate, FaFilePdf } from "react-icons/fa";
 
-const certificatesData = [
-  {
-    title: "React Development",
-    issuedBy: "ITKC",
-    date: "Jan 2026",
-    image: "/cert1.jpg",
-  },
-  {
-    title: "Full Stack Development",
-    issuedBy: "ITKC",
-    date: "Feb 2026",
-    image: "/cert2.jpg",
-  },
-  {
-    title: "Data Analytics",
-    issuedBy: "ITKC",
-    date: "Mar 2026",
-    image: "/cert3.jpg",
-  },
-  {
-    title: "Machine Learning",
-    issuedBy: "ITKC",
-    date: "Apr 2026",
-    image: "/cert4.jpg",
-  },
-];
+export default function Certificates() {
+  const navigate = useNavigate();
 
-const Certificates = () => {
+  // 🔐 SIMULATED LOGIN STATE
+  const isLoggedIn = false;
+
+  // 🔔 POPUP CONTROL
+  const [showPopup, setShowPopup] = useState(!isLoggedIn);
+
+  const certificatesData = [
+    {
+      title: "Diploma in ICT Skills and Office Management",
+      issuedBy: "IT Knowledge Centre (ITKC)",
+      issueDate: "January 2026",
+      certificateId: "ITKC/ICT/2026/001",
+      status: "Digitally Signed",
+    },
+    {
+      title: "Certification in Web Development",
+      issuedBy: "IT Knowledge Centre (ITKC)",
+      issueDate: "February 2026",
+      certificateId: "ITKC/WEB/2026/014",
+      status: "Digitally Signed",
+    },
+    {
+      title: "Certification in Data Analytics",
+      issuedBy: "IT Knowledge Centre (ITKC)",
+      issueDate: "March 2026",
+      certificateId: "ITKC/DATA/2026/022",
+      status: "Digitally Signed",
+    },
+    {
+      title: "Certification in Machine Learning",
+      issuedBy: "IT Knowledge Centre (ITKC)",
+      issueDate: "April 2026",
+      certificateId: "ITKC/ML/2026/031",
+      status: "Digitally Signed",
+    },
+  ];
+
   return (
     <>
-      <style>{`
-        .certificates-page {
-          min-height: 100vh;
-          background: linear-gradient(to right, #e3f2fd, #f1f8e9);
-          padding: 60px 20px;
-        }
-
-        .cert-title {
-          text-align: center;
-          color: #0d47a1;
-          font-weight: 600;
-          margin-bottom: 40px;
-          font-size: 2rem;
-        }
-
-        .certificate-card {
-          background: #ffffff;
-          border-radius: 12px;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-          overflow: hidden;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .certificate-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 14px 35px rgba(0,0,0,0.2);
-        }
-
-        .certificate-card img {
-          width: 100%;
-          height: 180px;
-          object-fit: cover;
-        }
-
-        .certificate-body {
-          padding: 16px;
-        }
-
-        .certificate-title {
-          font-weight: 500;
-          color: #01579b;
-          font-size: 1.1rem;
-        }
-
-        .certificate-sub {
-          color: #607d8b;
-          font-size: 0.9rem;
-        }
-      `}</style>
-
-      <div className="certificates-page">
-        <h2 className="cert-title">My Certificates</h2>
+      {/* PAGE CONTENT */}
+      <div
+        style={{
+          minHeight: "100vh",
+          backgroundColor: "#f4f7fb",
+          padding: "60px 20px",
+          filter: showPopup ? "blur(4px)" : "none",
+          pointerEvents: showPopup ? "none" : "auto",
+          transition: "0.3s ease",
+        }}
+      >
         <div className="container">
+          <h2 className="fw-bold text-primary mb-4 text-center">
+            My Certificates
+          </h2>
+
           <div className="row g-4">
             {certificatesData.map((cert, index) => (
-              <div key={index} className="col-sm-6 col-md-4 col-lg-3">
-                <div className="certificate-card">
-                  <img src={cert.image} alt={cert.title} />
-                  <div className="certificate-body">
-                    <div className="certificate-title">{cert.title}</div>
-                    <div className="certificate-sub">
-                      {cert.issuedBy} • {cert.date}
+              <div key={index} className="col-md-6 col-lg-4">
+                <div className="card h-100 shadow-sm border-0">
+                  <div className="card-body">
+                    <div className="d-flex align-items-center mb-3">
+                      <FaCertificate size={34} className="text-primary me-3" />
+                      <h6 className="fw-semibold mb-0">
+                        {cert.title}
+                      </h6>
                     </div>
+
+                    <p className="text-muted small mb-1">
+                      <strong>Issued By:</strong> {cert.issuedBy}
+                    </p>
+                    <p className="text-muted small mb-1">
+                      <strong>Issue Date:</strong> {cert.issueDate}
+                    </p>
+                    <p className="text-muted small mb-3">
+                      <strong>Certificate ID:</strong> {cert.certificateId}
+                    </p>
+
+                    <span className="badge bg-success mb-3">
+                      {cert.status}
+                    </span>
+
+                    <button
+                      className="btn btn-outline-primary w-100 mt-3"
+                      disabled={!isLoggedIn}
+                    >
+                      <FaFilePdf className="me-2" />
+                      View Certificate
+                    </button>
                   </div>
                 </div>
               </div>
@@ -101,8 +101,70 @@ const Certificates = () => {
           </div>
         </div>
       </div>
+
+      {/* LOGIN REQUIRED POPUP */}
+      {showPopup && (
+        <>
+          {/* DARK OVERLAY */}
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.6)",
+              zIndex: 1000,
+            }}
+          />
+
+          {/* POPUP */}
+          <div
+            style={{
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: "#fff",
+              borderRadius: "12px",
+              width: "90%",
+              maxWidth: "420px",
+              padding: "24px",
+              zIndex: 1001,
+              boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+            }}
+          >
+            {/* CLOSE */}
+            <div className="text-end">
+              <button
+                onClick={() => setShowPopup(false)}
+                style={{
+                  border: "none",
+                  background: "none",
+                  fontSize: "22px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            <h5 className="fw-bold text-primary mb-3">
+              Login Required
+            </h5>
+
+            <p className="text-muted">
+              To view and download your digitally signed certificates,
+              please login using your registered credentials.
+            </p>
+
+            <button
+              className="btn btn-primary w-100 mt-3"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          </div>
+        </>
+      )}
     </>
   );
-};
-
-export default Certificates;
+}
