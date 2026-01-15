@@ -1,4 +1,4 @@
-// backend/controllers/chatbot.controller.js
+// backend/controllers/chatbotController.js
 
 const db = require("../config/db");
 
@@ -19,7 +19,7 @@ exports.handleMessage = (req, res) => {
 
   db.query(query, (err, results) => {
     if (err) {
-      console.error("DB Error:", err);
+      console.error("Chatbot DB Error:", err);
       return res.status(500).json({
         reply: "Server error. Please try again later."
       });
@@ -33,18 +33,23 @@ exports.handleMessage = (req, res) => {
 
       const keywords = row.keywords
         .split(",")
-        .map((k) => k.trim());
+        .map(k => k.trim().toLowerCase());
 
-      if (keywords.some((k) => userMessage.includes(k))) {
+      if (keywords.some(k => userMessage.includes(k))) {
         reply = row.answer;
         break;
       }
     }
 
-    // Log chat (recommended for govt projects)
+    // Log chatbot conversation (safe, non-blocking)
     db.query(
       "INSERT INTO chatbot_logs (user_message, bot_response) VALUES (?, ?)",
-      [userMessage, reply]
+      [userMessage, reply],
+      (logErr) => {
+        if (logErr) {
+          console.error("Chatbot log error:", logErr);
+        }
+      }
     );
 
     return res.json({ reply });
